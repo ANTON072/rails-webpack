@@ -1,0 +1,140 @@
+AllCops:
+  TargetRubyVersion: 2.5
+  TargetRailsVersion: 5.1
+  Exclude:
+    - .git/**/*
+    - bin/**/*
+    - config/**/*
+    - db/schema.rb
+    - lib/tasks/*.rake
+    - log/**/*
+    - public/**/*
+    - tmp/**/*
+    - vendor/bundle/**/*
+    - vendor/gems/**/*
+    - bundle/**/*
+    - Dockerfile
+    - package.json
+
+Rails:
+  Enabled: true
+
+Layout/AlignParameters:
+  Exclude:
+    - db/fixtures/**/*
+
+Layout/BlockAlignment:
+  # ※第二以降の引数や method chain 後に渡すブロック終了を機械的に揃えると直感に反する
+  Enabled: false
+
+Layout/ClosingParenthesisIndentation:
+  Enabled: false
+
+Layout/EndAlignment:
+  AutoCorrect: true
+
+Layout/MultilineMethodCallBraceLayout:
+  Exclude:
+    - db/fixtures/**/*
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented_relative_to_receiver
+
+# メソッドチェーン記述の際、不可解なインデントに整形されてしまうため
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 45
+
+Metrics/BlockLength:
+  Max: 60 
+  ExcludedMethods:
+    - concern
+    - included
+    - class_methods
+  Exclude:
+    - Guardfile
+    - spec/**/*
+
+Metrics/ClassLength:
+  Exclude:
+    - db/migrate/**/*
+
+Metrics/CyclomaticComplexity:
+  Max: 30
+
+Metrics/LineLength:
+  Max: 79
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 45
+  Enabled: true
+
+Naming/FileName:
+  Exclude:
+    - Capfile
+    - Dockerfile
+    - Gemfile
+    - Rakefile
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BracesAroundHashParameters:
+  EnforcedStyle: context_dependent
+  Exclude:
+    - db/fixtures/**/*
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/LambdaCall:
+  EnforcedStyle: braces
+
+Style/RedundantSelf:
+  Enabled: false
+
+# obj.first rescue nil を自動修正させない（レベルを警告に変更）
+Style/RescueModifier:
+  Severity: warning
+  AutoCorrect: false
+
+Style/SignalException:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+  SupportedStyles:
+    - single_quotes
+    - double_quotes
+
+Style/TrailingCommaInArguments:
+  Exclude:
+    - db/fixtures/**/*
+
+Style/TrailingCommaInHashLiteral:
+  Exclude:
+    - db/fixtures/**/*
