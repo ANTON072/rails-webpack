@@ -16,17 +16,23 @@ module.exports = {
   },
   output: {
     filename: "[name]-[hash].js",
+    publicPath: "/packs/",
     path: path.resolve(__dirname, output)
   },
   plugins: [
     new CleanWebpackPlugin([output]),
     new MiniCssExtractPlugin({
-      filename: "[name]-[hash].css"
+      filename: "[name]-[hash].css",
+      allChunks: false
     }),
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(ENV)
     }),
-    new ManifestPlugin()
+    new ManifestPlugin({
+      fileName: "manifest.json",
+      publicPath: "/packs/",
+      writeToFileEmit: true
+    })
   ],
   module: {
     rules: [
@@ -68,9 +74,12 @@ module.exports = {
     extensions: [".js", ".json", ".css", ".scss"]
   },
   devServer: {
-    contentBase: path.resolve(__dirname, "public"),
+    contentBase: "public/packs",
     host: "0.0.0.0",
     historyApiFallback: true,
-    useLocalIp: true
+    disableHostCheck: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
   }
 }
