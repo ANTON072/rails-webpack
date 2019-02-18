@@ -25,8 +25,9 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(ENV)
-    })
-  ].concat(isProd ? [new ManifestPlugin()] : []),
+    }),
+    new ManifestPlugin()
+  ],
   module: {
     rules: [
       {
@@ -65,5 +66,11 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".json", ".css", ".scss"]
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, "public"),
+    host: "0.0.0.0",
+    historyApiFallback: true,
+    useLocalIp: true
   }
 }
