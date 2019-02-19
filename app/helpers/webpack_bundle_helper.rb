@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
+require "open-uri"
+
 module WebpackBundleHelper
   class BundleNotFound < StandardError; end
-
-  def asset_bundle_path(entry, **options)
-    raise BundleNotFound, "Could not find bundle with name #{entry}" unless manifest.key?(entry)
-
-    asset_path(manifest.fetch(entry), **options)
-  end
 
   def javascript_bundle_tag(entry, **options)
     path = asset_bundle_path("#{entry}.js")
@@ -43,9 +39,42 @@ module WebpackBundleHelper
 
   private
 
-  MANIFEST_PATH = "public/packs/manifest.json"
+  def asset_host
+    Rails.application.config.asset_host || ""
+  end
+
+  def dev_server_host
+    "http://#{Rails.application.config.dev_server_host}"
+  end
+
+  def pro_manifest
+    File.read("public/packs/manifest.json")
+  end
+
+  def dev_manifest
+    # webpack-dev-serverから直接取得する
+    OpenURI.open_url("#{dev_server_host}/packs/manifest.json").read
+  end
+
+  def test_manifest
+    File.read("public/packs-test/manifest.json")
+  end
 
   def manifest
-    @manifest ||= JSON.parse(File.read(MANIFEST_PATH))
+    return @manifest ||= JSON.parse(pro_manifest) if Rails.env.production?
+    return @manifest ||= JSON.parse(dev_manifest) if Rails.env.development?
+
+    @manifest ||= JSON.parse(test_manifest)
+  end
+
+  def valid_entry?(entry)
+    return true if manifest.key?(entry)
+
+    raise BundleNotFound, "Could not find bundle with name #{entry}"
+  end
+
+  def asset_bundle_path(entry, **options)
+    valid_entry?(entry)
+    asset_path(asset_host + manifest.fetch(entry), **options)
   end
 end
