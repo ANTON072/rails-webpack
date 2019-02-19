@@ -53,7 +53,7 @@ module WebpackBundleHelper
 
   def dev_manifest
     # webpack-dev-serverから直接取得する
-    OpenURI.open_url("#{dev_server_host}/packs/manifest.json").read
+    OpenURI.open_uri("#{dev_server_host}/packs/manifest.json").read
   end
 
   def test_manifest
